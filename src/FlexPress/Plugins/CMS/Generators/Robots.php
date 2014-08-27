@@ -45,7 +45,9 @@ class Robots
     {
 
         // only generate a new sitemap if the post is being published
-        if (($post_before->post_status != "publish") && ($post_after->post_status == 'publish')) {
+        if (($post_before->post_status != "publish")
+            && ($post_after->post_status == 'publish')
+        ) {
             $this->generateRobotsTxt();
         }
 

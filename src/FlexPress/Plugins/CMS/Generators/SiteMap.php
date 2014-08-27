@@ -1,9 +1,13 @@
 <?php
 
-namespace FlexPress\CMS\Generators;
+namespace FlexPress\Plugins\CMS\Generators;
+
+use FlexPress\Components\Hooks\HookableTrait;
 
 class SiteMap
 {
+
+    use HookableTrait;
 
     // ==================
     // ! ACTIONS
@@ -20,10 +24,10 @@ class SiteMap
      *
      * @return bool
      */
-    public function trashed_post()
+    public function trashedPost()
     {
 
-        $this->_generate_sitemap();
+        $this->generateSitemap();
         return true;
 
     }
@@ -40,13 +44,15 @@ class SiteMap
      * @type action
      * @params 3
      */
-    public function post_updated($post_id, $post_after, $post_before)
+    public function postUpdated($post_id, $post_after, $post_before)
     {
 
         // only generate a new sitemap if the post is being published
-        if (($post_before->post_status != "publish") && ($post_after->post_status == 'publish')) {
+        if (($post_before->post_status != "publish")
+            && ($post_after->post_status == 'publish')
+        ) {
 
-            $this->_generate_sitemap();
+            $this->generateSitemap();
 
         }
 
@@ -55,18 +61,17 @@ class SiteMap
     /**
      * Generate The Sitemap of the website each time a page is created.
      *
-     * @return file
      * @author Adam Bulmer
      */
 
-    private function _generate_sitemap()
+    private function generateSitemap()
     {
 
-        if ($site_map = $this->_generate_xml()) {
+        if ($site_map = $this->generateXml()) {
 
-            if ($this->_save_file($site_map)) {
+            if ($this->saveFile($site_map)) {
 
-                $this->_submit_file();
+                $this->submitFile();
 
             }
 
@@ -85,7 +90,7 @@ class SiteMap
      * @author Adam Bulmer
      */
 
-    private function _generate_xml()
+    private function generateXml()
     {
 
         $args = array(
@@ -100,7 +105,7 @@ class SiteMap
 
         if ($results = get_posts($args)) {
 
-            $sitemap = new SimpleXMLElement($this->get_doc_structure());
+            $sitemap = new \SimpleXMLElement($this->getDocStructure());
 
             foreach ($results as $result) {
 
@@ -145,13 +150,15 @@ class SiteMap
      * @author Adam Bulmer
      */
 
-    private function _save_file($sitemap)
+    private function saveFile($sitemap)
     {
 
         if ($sitemap) {
 
-            if ($path = $this->get_file_path()) {
+            if ($path = $this->getFilePath()) {
+
                 return file_put_contents($path, $sitemap);
+
             }
 
         }
@@ -164,10 +171,10 @@ class SiteMap
      * @author Adam Bulmer
      */
 
-    private function _submit_file()
+    private function submitFile()
     {
 
-        $encoded_url = urlencode($this->get_file_url());
+        $encoded_url = urlencode($this->getFileUrl());
 
         wp_remote_get(self::GOOGLE_WEBMASTER_TOOLS_URL . $encoded_url);
         wp_remote_get(self::BING_WEBMASTER_TOOLS_URL . $encoded_url);
@@ -180,13 +187,11 @@ class SiteMap
      * @author Adam Bulmer
      */
 
-    public function get_file_path()
+    public function getFilePath()
     {
 
-        if (is_writable(ABSPATH)) {
-
-            return ABSPATH . DIRECTORY_SEPARATOR . $this->get_file_name();
-
+        if (is_writable($_SERVER['DOCUMENT_ROOT'])) {
+            return $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $this->getFileName();
         }
 
     }
@@ -198,10 +203,10 @@ class SiteMap
      * @author Adam Bulmer
      */
 
-    public function get_file_url()
+    public function getFileUrl()
     {
 
-        return get_bloginfo('url') . DIRECTORY_SEPARATOR . $this->get_file_name();
+        return get_bloginfo('url') . "/" . $this->getFileName();
 
     }
 
@@ -213,11 +218,18 @@ class SiteMap
      * @editor Tim Perry
      */
 
-    public function get_file_name()
+    public function getFileName()
     {
 
-        return is_multisite() ? apply_filters('fpcms_sitemap_name', 'sitemap') . '-' . get_current_blog_id(
-            ) . '.xml' : apply_filters('fpcms_sitemap_name', 'sitemap') . '.xml';
+        $fileName = "sitemap";
+
+        if (is_multisite()) {
+            $fileName .= "-" . get_current_blog_id();
+        }
+
+        $fileName .= ".xml";
+
+        return apply_filters('fpcms_sitemap_name', $fileName);
 
     }
 
@@ -228,7 +240,7 @@ class SiteMap
      * @author Adam Bulmer
      */
 
-    public function get_doc_structure()
+    public function getDocStructure()
     {
 
         $xml_string = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
@@ -245,11 +257,9 @@ class SiteMap
      * @type action
      */
 
-    public function admin_notices()
+    public function adminNotices()
     {
-
         $this->display_writable_error_message();
-
     }
 
     /**
@@ -262,7 +272,7 @@ class SiteMap
     public function display_writable_error_message()
     {
 
-        if (!$this->get_file_path()) {
+        if (!$this->getFilePath()) {
             echo '<div class="error"><p><strong>Website Root Folder Not Writable, Cannot create sitemap!</strong></p></div>';
         }
 
