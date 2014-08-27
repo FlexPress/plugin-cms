@@ -12,8 +12,9 @@ Author URI: https://github.com/FlexPress
 use FlexPress\Plugins\CMS\DependencyInjection\DependencyInjectionContainer;
 
 // Include autoloader if installed on it's own.
-if(file_exists('vendor/autoload.php')) {
-    require_once('vendor/autoload.php');
+$autoloadFile = __DIR__ . '/vendor/autoload.php';
+if (file_exists($autoloadFile)) {
+    require_once($autoloadFile);
 }
 
 // Dependency Injection
