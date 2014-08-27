@@ -22,4 +22,4 @@ $dic = new DependencyInjectionContainer();
 $dic->init();
 
 // Run cms
-$dic['CMS']->init(__DIR__);
+$dic['CMS']->init(__FILE__);

@@ -66,6 +66,6 @@ class CMS extends AbstractPlugin
      */
     public function getViewPath($template)
     {
-        return $this->baseDir . '/views/' . $template;
+        return $this->path . '/views/' . $template;
     }
 }
