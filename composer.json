@@ -5,7 +5,7 @@
     "require": {
         "pimple/pimple": "v2.0.0",
         "flexpress/component-hooks": "1.0.*",
-        "flexpress/component-meta-box": "dev-master",
+        "flexpress/component-metabox": "dev-master",
         "symfony/http-foundation": "*",
         "composer/installers": "~1.0"
     },
