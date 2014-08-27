@@ -59,28 +59,40 @@ class Backend
     public function tinyMceBeforeInit($init)
     {
 
-        // Create array of new styles
-        $new_styles = array(
+        $styleFormats = array(
             array(
-                'title' => __('CMS Styles', 'flexpress'),
-                'items' => apply_filters(
-                    'fpcms_tiny_mce_styles',
-                    array(
-                        array(
-                            'title' => __('Intro Text', 'flexpress'),
-                            'selector' => 'p',
-                            'classes' => 'intro-text'
-                        ),
-                    )
-                ),
+                'title' => 'Intro Text',
+                'selector' => 'p',
+                'classes' => 'intro-text'
             ),
+            array(
+                'title' => 'Paragraph',
+                'format' => 'p'
+            ),
+            array(
+                'title' => 'Header 2',
+                'format' => 'h2'
+            ),
+            array(
+                'title' => 'Header 3',
+                'format' => 'h3'
+            ),
+            array(
+                'title' => 'Header 4',
+                'format' => 'h4'
+            ),
+            array(
+                'title' => 'Blockquote',
+                'format' => 'blockquote',
+                'icon' => 'blockquote'
+            )
         );
 
         // Merge old & new styles
-        $init['style_formats_merge'] = true;
+        $init['style_formats_merge'] = false;
 
         // Add new styles
-        $init['style_formats'] = json_encode($new_styles);
+        $init['style_formats'] = json_encode($styleFormats);
 
         return $init;
 
@@ -180,6 +192,8 @@ class Backend
     public function uploadMimes($mime_types)
     {
 
+        $mime_types['svg'] = 'image/svg+xml';
+        $mime_types['png'] = 'image/png';
         $mime_types['dot'] = 'application/msword';
         $mime_types['pub'] = 'application/x-mspublisher';
 
