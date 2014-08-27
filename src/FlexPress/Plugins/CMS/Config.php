@@ -23,7 +23,6 @@ class Config
 
         if (!get_option(self::OPTIONS_KEY_SETUP_DONE)) {
 
-            $this->setupACFOptions();
             $this->setupDefaultOptions();
             $this->setupTinyMCEDefaults();
 
@@ -32,7 +31,6 @@ class Config
         }
 
     }
-
 
     /**
      *
