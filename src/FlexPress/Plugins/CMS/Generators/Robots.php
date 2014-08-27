@@ -2,8 +2,13 @@
 
 namespace FlexPress\Plugins\CMS\Generators;
 
+use FlexPress\Components\Hooks\HookableTrait;
+
 class Robots
 {
+
+    use HookableTrait;
+
     // ==================
     // ! ACTIONS
     // ==================
@@ -16,10 +21,10 @@ class Robots
      *
      * @return bool
      */
-    public function trashed_post()
+    public function trashedPost()
     {
 
-        $this->_generate_sitemap();
+        $this->generateRobotsTxt();
         return true;
 
     }
@@ -36,14 +41,12 @@ class Robots
      * @type action
      * @params 3
      */
-    public function post_updated($post_id, $post_after, $post_before)
+    public function postUpdated($post_id, $post_after, $post_before)
     {
 
         // only generate a new sitemap if the post is being published
         if (($post_before->post_status != "publish") && ($post_after->post_status == 'publish')) {
-
-            $this->_generate_robots_txt();
-
+            $this->generateRobotsTxt();
         }
 
     }
@@ -63,10 +66,10 @@ class Robots
      * @author Tim Perry
      *
      */
-    public function robots_txt()
+    public function robotsTxt()
     {
 
-        return file_get_contents($this->get_file_path());
+        return file_get_contents($this->getFilePath());
 
     }
 
@@ -81,7 +84,7 @@ class Robots
      * @author Tim Perry
      */
 
-    private function _generate_robots_txt()
+    private function generateRobotsTxt()
     {
 
         $args = array(
@@ -133,7 +136,7 @@ class Robots
                 $content .= "Allow: /$year/*\r";
             }
 
-            $this->_save_file($content);
+            $this->saveFile($content);
 
         }
 
@@ -148,12 +151,12 @@ class Robots
      * @author Tim Perry
      */
 
-    private function _save_file($content)
+    private function saveFile($content)
     {
 
         if ($content) {
 
-            if ($path = $this->get_file_path()) {
+            if ($path = $this->getFilePath()) {
                 return file_put_contents($path, $content);
             }
 
@@ -169,11 +172,11 @@ class Robots
      * @author Tim Perry
      */
 
-    public function get_file_path()
+    public function getFilePath()
     {
 
-        if (is_writable(ABSPATH)) {
-            return ABSPATH . DIRECTORY_SEPARATOR . $this->get_file_name();
+        if (is_writable($_SERVER['DOCUMENT_ROOT'])) {
+            return $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $this->getFileName();
         }
 
         return false;
@@ -189,10 +192,10 @@ class Robots
      * @editor Tim Perry
      */
 
-    public function get_file_name()
+    public function getFileName()
     {
 
-        $filename = apply_filters('fpcms_robotstxt_name', 'robots');
+        $filename = 'robots';
 
         if (is_multisite()) {
 
@@ -201,7 +204,9 @@ class Robots
 
         }
 
-        return $filename . '.txt';
+        $filename .= '.txt';
+
+        return apply_filters('fpcms_robotstxt_name', $filename);
 
     }
 
@@ -212,11 +217,9 @@ class Robots
      * @type action
      */
 
-    public function admin_notices()
+    public function adminNotices()
     {
-
-        $this->display_writable_error_message();
-
+        $this->displayWritableErrorMessage();
     }
 
     /**
@@ -226,10 +229,10 @@ class Robots
      * @author Tim Perry
      */
 
-    public function display_writable_error_message()
+    public function displayWritableErrorMessage()
     {
 
-        if ( !$this->get_file_path()) {
+        if (!$this->getFilePath()) {
             echo '<div class="error"><p><strong>Website Root Folder Not Writable, Cannot create sitemap!</strong></p></div>';
         }
 

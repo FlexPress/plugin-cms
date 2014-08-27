@@ -6,6 +6,7 @@ use FlexPress\Components\Hooks\Hooker;
 use FlexPress\Components\MetaBox\Helper as MetaBoxHelper;
 use FlexPress\Plugins\CMS\CMS;
 use FlexPress\Plugins\CMS\Generators\PDFThumbnail;
+use FlexPress\Plugins\CMS\Generators\Robots;
 use FlexPress\Plugins\CMS\MetaBoxes\PageType;
 use FlexPress\Plugins\CMS\UI\Backend;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +53,10 @@ class DependencyInjectionContainer extends \Pimple
             return new PDFThumbnail();
         };
 
+        $this['robots'] = function () {
+            return new Robots();
+        };
+
     }
 
     /**
@@ -71,7 +76,8 @@ class DependencyInjectionContainer extends \Pimple
         $this['hooker'] = function ($c) {
             return new Hooker($c['objectStorage'], array(
 //                $c['backendUI'],
-                $c['pdfThumbnail']
+                $c['pdfThumbnail'],
+                $c['robots']
             ));
         };
 

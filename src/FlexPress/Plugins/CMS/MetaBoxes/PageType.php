@@ -15,7 +15,6 @@ class PageType extends AbstractMetaBox
      */
     protected $request;
 
-
     /**
      * @var \Pimple
      */
