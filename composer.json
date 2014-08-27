@@ -1,0 +1,17 @@
+{
+    "name": "flexpress/plugin-cms",
+    "description": "Used to make WordPress more of a CMS",
+    "type": "wordpress-plugin",
+    "require": {
+        "pimple/pimple": "v2.0.0",
+        "flexpress/component-hooks": "1.0.*",
+        "flexpress/component-meta-box": "dev-master",
+        "symfony/http-foundation": "*",
+        "composer/installers": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flexpress\\Plugins\\CMS\\": "src/Flexpress/Plugins/CMS/"
+        }
+    }
+}

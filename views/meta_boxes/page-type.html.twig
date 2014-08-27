@@ -1,0 +1,11 @@
+{% if options %}
+    {% for option in options %}
+        <p>
+            <label>
+                <input type="radio" {% if current_value == option['value'] %} checked="checked" {% endif %}name="{{ field_name }}" value="{{ option['value'] }}"/> {{ option['label'] }}
+            </label>
+        </p>
+    {% endfor %}
+{% else %}
+    <p>No options available, ask your administrator to add some page formats.</p>
+{% endif %}
