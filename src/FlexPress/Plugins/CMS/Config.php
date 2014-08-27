@@ -3,6 +3,7 @@
 namespace FlexPress\Plugins\CMS;
 
 use FlexPress\Components\Hooks\HookableTrait;
+use FlexPress\Plugins\CMS\MetaBoxes\PageType;
 
 class Config
 {
@@ -15,10 +16,11 @@ class Config
      *
      * Used to install some default options and configurations
      *
+     * @type action
      * @author Tim Perry
      *
      */
-    public function install()
+    public function adminInit()
     {
 
         if (!get_option(self::OPTIONS_KEY_SETUP_DONE)) {
@@ -265,15 +267,75 @@ class Config
     }
 
     /**
+     * Add custom ACF location rule types
      *
-     * Init hook
+     * @author Tim Perry
+     * @type filter
+     * @hook_name acf/location/rule_types
+     */
+    public function acfLocationRulesTypes($choices)
+    {
+
+        $choices['CMS']['fp_page_type'] = "Page Type";
+        return $choices;
+
+    }
+
+    /**
+     * Add custom ACF location rule types
      *
-     * @type action
+     * @author Tim Perry
+     * @type filter
+     * @hook_name acf/location/rule_values/fp_page_type
+     */
+    public function acfLocationRulesValuesFpPageType($choices)
+    {
+
+        $choices['standard'] = 'Standard';
+        $choices['section'] = 'Section';
+        $choices['nonmenu'] = 'Non Menu';
+
+        return $choices;
+
+    }
+
+    /**
+     * Add custom ACF location matching rules
+     *
      * @author Tim Perry
      *
+     * @param $match
+     * @param $rule
+     * @param $options
+     *
+     * @return array
+     *
+     * @type filter
+     * @hook_name acf/location/rule_match/fp_page_type
+     * @priority 10
+     * @params 3
+     *
      */
-    public function init()
+    public function acfLocationRulesMatchPageFormat($match, $rule, $options)
     {
-        date_default_timezone_set('Europe/London');
+
+        if( !$pageType = get_post_meta($options['post_id'], PageType::META_NAME_PAGE_TYPE, true) ){
+            $pageType = 'standard';
+        }
+
+        if ($rule['operator'] == '==') {
+
+            $match = ($pageType == $rule['value']);
+
+        } elseif ($rule['operator'] == '!=') {
+
+            $match = ($pageType != $rule['value']);
+
+        }
+
+        return $match;
+
     }
+
+
 }

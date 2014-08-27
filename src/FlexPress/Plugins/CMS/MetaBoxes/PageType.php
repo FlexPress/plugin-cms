@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PageType extends AbstractMetaBox
 {
 
-    const OPTION_NAME_PAGE_TYPE = 'fp_page_type';
+    const META_NAME_PAGE_TYPE = 'fp_page_type';
 
     /**
      * @var Request
@@ -49,7 +49,7 @@ class PageType extends AbstractMetaBox
         $context = \Timber::get_context();
 
         $context['options'] = $this->getOptions();
-        $context['field_name'] = self::OPTION_NAME_PAGE_TYPE;
+        $context['field_name'] = self::META_NAME_PAGE_TYPE;
         $context['current_value'] = $this->getCurrentValue();
 
         \Timber::render($this->dic['CMS']->getViewPath('meta_boxes/page-type.html.twig'), $context);
@@ -68,7 +68,7 @@ class PageType extends AbstractMetaBox
     protected function getCurrentValue()
     {
 
-        if (!$value = get_post_meta($GLOBALS['post']->ID, self::OPTION_NAME_PAGE_TYPE, true)) {
+        if (!$value = get_post_meta($GLOBALS['post']->ID, self::META_NAME_PAGE_TYPE, true)) {
             $value = 'default';
         }
 
@@ -122,8 +122,8 @@ class PageType extends AbstractMetaBox
             return;
         }
 
-        if ($updatedValue = $this->request->get(self::OPTION_NAME_PAGE_TYPE)) {
-            update_post_meta($postID, self::OPTION_NAME_PAGE_TYPE, $updatedValue);
+        if ($updatedValue = $this->request->get(self::META_NAME_PAGE_TYPE)) {
+            update_post_meta($postID, self::META_NAME_PAGE_TYPE, $updatedValue);
         }
 
     }
