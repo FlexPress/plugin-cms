@@ -5,13 +5,14 @@
     "require": {
         "pimple/pimple": "v2.0.0",
         "flexpress/component-hooks": "1.0.*",
-        "flexpress/component-metabox": "dev-master",
+        "flexpress/component-metabox": "@dev",
         "symfony/http-foundation": "*",
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "flexpress/component-plugin": "1.0.*"
     },
     "autoload": {
         "psr-4": {
-            "Flexpress\\Plugins\\CMS\\": "src/Flexpress/Plugins/CMS/"
+            "FlexPress\\Plugins\\CMS\\": "src/FlexPress/Plugins/CMS/"
         }
     }
 }

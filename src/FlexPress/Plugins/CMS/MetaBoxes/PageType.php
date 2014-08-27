@@ -2,10 +2,10 @@
 
 namespace FlexPress\Plugins\CMS\MetaBoxes;
 
-use FlexPress\Components\MetaBox\MetaBox;
+use FlexPress\Components\MetaBox\AbstractMetaBox;
 use Symfony\Component\HttpFoundation\Request;
 
-class PageType extends MetaBox
+class PageType extends AbstractMetaBox
 {
 
     const OPTION_NAME_PAGE_TYPE = 'fp_page_type';
