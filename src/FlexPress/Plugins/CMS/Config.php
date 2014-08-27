@@ -33,23 +33,6 @@ class Config
 
     }
 
-    /**
-     *
-     * Adds the license keys for acf addons
-     *
-     * @author Tim Perry
-     *
-     */
-    protected function setupACFOptions()
-    {
-
-        update_option('acf_repeater_ac', 'QJF7-L4IX-UCNP-RF2W');
-        update_option('acf_options_page_ac', 'OPN8-FA4J-Y2LW-81LS');
-        update_option('acf_flexible_content_ac', 'FC9O-H6VN-E4CL-LT33');
-        update_option('acf_gallery_ac', 'GF72-8ME6-JS15-3PZC');
-
-    }
-
 
     /**
      *
