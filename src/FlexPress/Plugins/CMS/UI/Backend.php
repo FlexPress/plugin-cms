@@ -405,7 +405,7 @@ class Backend
         add_meta_box(
             'fp_available_shortcodes',
             'Available Shortcodes',
-            array($this, 'available_shortcodes'),
+            array($this, 'availableShortcodes'),
             'post',
             'side',
             'default'
