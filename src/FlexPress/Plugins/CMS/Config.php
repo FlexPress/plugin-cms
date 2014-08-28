@@ -27,6 +27,7 @@ class Config
 
             $this->setupDefaultOptions();
             $this->setupTinyMCEDefaults();
+            $this->setupPageTypeDefaults();
 
             update_option(self::OPTIONS_KEY_SETUP_DONE, 1);
 
@@ -267,6 +268,29 @@ class Config
     }
 
     /**
+     *
+     * Updates all page types to standard that are not already set
+     *
+     * @author Tim Perry
+     *
+     */
+    protected function setupPageTypeDefaults()
+    {
+
+        $pages = get_pages();
+
+        foreach ($pages as $page) {
+
+            if (!$value = get_post_meta($page->ID, PageType::META_NAME_PAGE_TYPE, true)) {
+
+                update_post_meta($page->ID, PageType::META_NAME_PAGE_TYPE, 'standard');
+
+            }
+        }
+
+    }
+
+    /**
      * Add custom ACF location rule types
      *
      * @author Tim Perry
@@ -319,7 +343,7 @@ class Config
     public function acfLocationRulesMatchPageFormat($match, $rule, $options)
     {
 
-        if( !$pageType = get_post_meta($options['post_id'], PageType::META_NAME_PAGE_TYPE, true) ){
+        if (!$pageType = get_post_meta($options['post_id'], PageType::META_NAME_PAGE_TYPE, true)) {
             $pageType = 'standard';
         }
 
