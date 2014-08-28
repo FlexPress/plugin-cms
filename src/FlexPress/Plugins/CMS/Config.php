@@ -269,7 +269,7 @@ class Config
 
     /**
      *
-     * Updates all page types to standard that are not already set
+     * Updates all page types to default that are not already set
      *
      * @author Tim Perry
      *
@@ -283,7 +283,7 @@ class Config
 
             if (!$value = get_post_meta($page->ID, PageType::META_NAME_PAGE_TYPE, true)) {
 
-                update_post_meta($page->ID, PageType::META_NAME_PAGE_TYPE, 'standard');
+                update_post_meta($page->ID, PageType::META_NAME_PAGE_TYPE, 'default');
 
             }
         }
