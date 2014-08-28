@@ -4,7 +4,7 @@
 Plugin Name: CMS Plugin
 Plugin URI: https://github.com/FlexPress/plugin-cms
 Description: FlexPress cms plugin
-Version: 1.0.2
+Version: 1.0.3
 Author: FlexPress
 Author URI: https://github.com/FlexPress
 */
