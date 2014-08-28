@@ -343,6 +343,10 @@ class Config
     public function acfLocationRulesMatchPageFormat($match, $rule, $options)
     {
 
+        if (get_post_type($options['post_id']) != 'page') {
+            return false;
+        }
+
         if (!$pageType = get_post_meta($options['post_id'], PageType::META_NAME_PAGE_TYPE, true)) {
             $pageType = 'standard';
         }
